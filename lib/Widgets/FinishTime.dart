@@ -13,24 +13,24 @@ class _FinishTimeState extends State<FinishTime> {
   DateTime _selectedTime = DateTime.now();
 
   Future<void> selectTime(BuildContext context) async {
-    await showCupertinoModalPopup(
+    await showModalBottomSheet(
       context: context,
       builder: (BuildContext context) =>
-          SizedBox(
-              height: MediaQuery.of(context).size.height * 0.3,
-              //width: MediaQuery.of(context).size.width + MediaQuery.of(context).padding.horizontal, //넓이 수정 필요
-              child: CupertinoDatePicker(
-                backgroundColor: Colors.white,
-                initialDateTime: _selectedTime,
-                use24hFormat: false,
-                mode: CupertinoDatePickerMode.time,
-                onDateTimeChanged: (DateTime newTime) {
-                  setState(() {
-                    _selectedTime = newTime;
-                  });
-                },
-              )
-          )
+          Container(
+            color: Colors.white,
+            height: MediaQuery.of(context).size.height * 0.3,
+            child: CupertinoDatePicker(
+              backgroundColor: Colors.white,
+              initialDateTime: _selectedTime,
+              use24hFormat: false,
+              mode: CupertinoDatePickerMode.time,
+              onDateTimeChanged: (DateTime newTime) {
+                setState(() {
+                  _selectedTime = newTime;
+                });
+              },
+            )
+        )
     );
   }
 

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toy_project1/Screens/NewToDoscreen.dart';
 
@@ -12,13 +11,6 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   onTapNewToDo() {
     Navigator.push(context, MaterialPageRoute(builder: (context) => const NewToDoScreen()));
-  }
-
-  bool isToggledOff = true;
-  toggle() {
-    setState(() {
-      isToggledOff = !isToggledOff;
-    });
   }
 
   @override

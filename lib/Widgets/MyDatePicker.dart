@@ -11,10 +11,10 @@ class MyDatePicker extends StatefulWidget {
 class _MyDatePickerState extends State<MyDatePicker> {
   DateTime selectedDate = DateTime.now(); //사용자가 고른 날짜 저장할 변수 (DateTime type)
 
-  selectDate() { //날짜 선택 버튼 클릭 시 실햄 함수
+  selectDate() { //날짜 선택 버튼 클릭 시 실행 함수
     setState(() {
       showDatePicker(context: context, firstDate: DateTime(2024), lastDate: DateTime(2025,12,31)).then((date) {
-        setState(() { //showDatePicker: 달력 출력 / then 통해 (date)를 저장
+        setState(() { //showDatePicker: 달력 출력 / showDatePicker.then 통해 (date)를 저장
           selectedDate = date!;
         });
       });
@@ -25,12 +25,10 @@ class _MyDatePickerState extends State<MyDatePicker> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text("날 짜", style: TextStyle(fontSize: 20),),
-        const SizedBox(width: 30,),
         Text("${selectedDate.year}년 ${selectedDate.month}월 ${selectedDate.day}일", style: const TextStyle(fontSize: 17)),
-        const SizedBox(width: 40),
         ElevatedButton(onPressed: selectDate, //버튼 클릭 시 selectDate 함수 호출
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.amber,
