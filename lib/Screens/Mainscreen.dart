@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:toy_project1/HiveModel/HiveModelClass.dart';
 import 'package:toy_project1/Screens/NewToDoscreen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -9,6 +11,21 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  List<ToDoModel> todolist = []; //ToDoModel 자료형의 list 생성 및 초기화
+
+  @override
+  void initState() {
+    super.initState();
+    loadTodos();
+  }
+
+  void loadTodos() async {
+    var box = await Hive.openBox('todolist');
+    setState(() {
+      todolist = box.values.toList().cast<ToDoModel>(); //이해 안 됨
+    });
+  }
+
   onTapNewToDo() {
     Navigator.push(context, MaterialPageRoute(builder: (context) => const NewToDoScreen()));
   }
@@ -39,8 +56,12 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
       ),
-      body: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10,),
+      body: ListView.builder(itemBuilder: (context, index) { //수정 부분
+        return ListTile(title: Text(todolist[index].title));
+      })
+      /*
+      const Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10,),
         child: Column(
           children: [
             ExpansionTile(
@@ -73,6 +94,8 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
       ),
+
+       */
     );
   }
 }

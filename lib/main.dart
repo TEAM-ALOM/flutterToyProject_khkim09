@@ -5,8 +5,6 @@ import 'package:toy_project1/Screens/Mainscreen.dart';
 void main() async{
   await Hive.initFlutter();
 
-  var box = await Hive.openBox('myBox');
-
   runApp(const MyApp());
 }
 

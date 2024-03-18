@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
+import 'package:hive/hive.dart';
+import 'package:toy_project1/HiveModel/HiveModelClass.dart';
 import 'package:toy_project1/Widgets/MemoWidget.dart';
 import 'package:toy_project1/Widgets/ToDoWidget.dart';
 import '../Widgets/MyDatePicker.dart';
@@ -15,14 +14,17 @@ class NewToDoScreen extends StatefulWidget {
 }
 
 class _NewToDoScreenState extends State<NewToDoScreen> {
-  save() { //완료 클릭 시 할 일 저장 (구현 필요) - 할 일 공란 시 경고창 생성 추가
-    showDialog(context: context, builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text("저장해라잉"),
-      );
-    }
-    );
+  /* 여기서부터 수정*/
+  late String title;
+  late DateTime dateTime;
+  late String memo;
+
+  save() async { //완료 클릭 시 할 일 저장 (구현 필요) - 할 일 공란 시 경고창 생성 추가
+    var box = await Hive.openBox('todolist'); //todolist : hive Box 이름, openBox : data 저장할 공간 생성
+    await box.add(ToDoModel(title: title, dateTime: dateTime, memo: memo));
   }
+  /* 여기까지 수정*/
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,11 @@ class _NewToDoScreenState extends State<NewToDoScreen> {
         ),
         title: const Text("오늘의 할 일이 무엇인가요?", style: TextStyle(fontSize: 22),),
         actions: [
-          IconButton(onPressed: () => save(), icon: const Text("완료", style: TextStyle(fontSize: 18),)) //!!!!Save 구현 필요!!!!
+          IconButton(onPressed: () { //save 구현 및 mainscreen으로 복귀 구현
+            save();
+            Navigator.pop(context);
+          },
+              icon: const Text("완료", style: TextStyle(fontSize: 18),))
         ],
       ),
       body: GestureDetector(
