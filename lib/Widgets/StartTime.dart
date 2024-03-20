@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class StartTime extends StatefulWidget {
-  const StartTime({super.key});
+  final Function(DateTime) startTimeChanged;
+
+  const StartTime({super.key, required this.startTimeChanged});
 
   @override
   State<StartTime> createState() => _StartTimeState();
@@ -45,7 +47,10 @@ class _StartTimeState extends State<StartTime> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               alignment: Alignment.center,
               child: TextButton(
-                  onPressed: () => selectTime(context),
+                  onPressed: () {
+                    selectTime(context);
+                    widget.startTimeChanged(_selectedTime);
+                  },
                   child: Text(DateFormat("HH : mm").format(_selectedTime), style: const TextStyle(fontSize: 20, color: Colors.black),)
               )
           ),

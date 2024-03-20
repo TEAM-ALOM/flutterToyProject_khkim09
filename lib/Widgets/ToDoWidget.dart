@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ToDoText extends StatefulWidget {
-  const ToDoText({super.key});
+  final Function(String) onTextSubmitted;
+
+  const ToDoText({super.key, required this.onTextSubmitted});
 
   @override
   State<ToDoText> createState() => _ToDoTextState();
@@ -10,9 +11,8 @@ class ToDoText extends StatefulWidget {
 
 class _ToDoTextState extends State<ToDoText> {
   TextEditingController newToDo = TextEditingController(); //controller: TextEditingController - textfield 입력 값 접근 위한 변수
-  bool isTouched = false;
 
-  check() {
+  void check() {
     if (newToDo.text.isEmpty) {
       showDialog(context: context, builder: (BuildContext context) { //창 생성
         return AlertDialog( //경고창 띄우기
@@ -45,12 +45,10 @@ class _ToDoTextState extends State<ToDoText> {
         const Text("할 일", style: TextStyle(fontSize: 20),),
         TextField(
           controller: newToDo, //textfield의 변환된 값 접근을 위한 장치
-          onTap: () => setState(() { //textfield 한 번 건드리기 전까진 무반응
-            isTouched = true; //한 번이라도 건드리면 textfield 채워야만 넘어가기 가능
-          }),
-          onEditingComplete: () { //입력 완료 시 check 함수 호출
+          onEditingComplete: () {//입력 완료 시 check 함수 호출
             check();
             FocusScope.of(context).unfocus(); //키보드 사라짐
+            widget.onTextSubmitted(newToDo.text); //newToDo.text 값 부모에게 반환(ToDoText위젯 호출한 곳으로) stful이라 widget속성 사용
           },
         ),
       ],

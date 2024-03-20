@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class FinishTime extends StatefulWidget {
-  const FinishTime({super.key});
+  final Function(DateTime) finishTimeChanged;
+
+  const FinishTime({super.key, required this.finishTimeChanged});
 
   @override
   State<FinishTime> createState() => _FinishTimeState();
@@ -45,7 +47,10 @@ class _FinishTimeState extends State<FinishTime> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               alignment: Alignment.center,
               child: TextButton(
-                  onPressed: () => selectTime(context),
+                  onPressed: () {
+                    selectTime(context);
+                    widget.finishTimeChanged(_selectedTime);
+                  },
                   child: Text(DateFormat("HH : mm").format(_selectedTime), style: const TextStyle(fontSize: 20, color: Colors.black),)
               )
           ),

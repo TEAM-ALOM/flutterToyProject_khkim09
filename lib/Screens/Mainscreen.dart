@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:toy_project1/HiveModel/HiveModelClass.dart';
 import 'package:toy_project1/Screens/NewToDoscreen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -11,23 +9,21 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  List<ToDoModel> todolist = []; //ToDoModel 자료형의 list 생성 및 초기화
+  List todoList = [];
 
-  @override
-  void initState() {
-    super.initState();
-    loadTodos();
+  Future<void> onTapNewToDo() async {
+    var todoData = await Navigator.push(context, MaterialPageRoute(builder: (context) => const NewToDoScreen()));
+    if (todoData != null) {
+      setState(() {
+        todoList.add(todoData); //list에 추가
+      });
+    }
   }
 
-  void loadTodos() async {
-    var box = await Hive.openBox('todolist');
+  void del(int index) {
     setState(() {
-      todolist = box.values.toList().cast<ToDoModel>(); //이해 안 됨
+      todoList.removeAt(index);
     });
-  }
-
-  onTapNewToDo() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const NewToDoScreen()));
   }
 
   @override
@@ -56,46 +52,122 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
       ),
-      body: ListView.builder(itemBuilder: (context, index) { //수정 부분
-        return ListTile(title: Text(todolist[index].title));
-      })
-      /*
-      const Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10,),
-        child: Column(
-          children: [
-            ExpansionTile(
-              title: Text("오늘의 할 일", style: TextStyle(fontSize: 20)),
-              children: [
-                Text("할 일을 작성해주세요!", style: TextStyle(fontSize: 18)),
-              ],
-            ),
-            SizedBox(height: 20,),
-            ExpansionTile(
-              title: Text("일주일 간 해야할 일", style: TextStyle(fontSize: 20)),
-              children: [
-                Text("할 일을 작성해주세요!", style: TextStyle(fontSize: 18)),
-              ],
-            ),
-            SizedBox(height: 20,),
-            ExpansionTile(
-              title: Text("이번 달의 할 일", style: TextStyle(fontSize: 20)),
-              children: [
-                Text("할 일을 작성해주세요!", style: TextStyle(fontSize: 18)),
-              ],
-            ),
-            SizedBox(height: 100),
-            ExpansionTile(
-              title: Text("지금 할 일", style: TextStyle(fontSize: 20)),
-              children: [
-                Text("할 일을 작성해주세요!", style: TextStyle(fontSize: 18)),
-              ],
-            ),
-          ],
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 0, 10, 50),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ExpansionTile(
+                title: const Text("오늘의 할 일", style: TextStyle(fontSize: 20)),
+                children: [
+                  if (todoList.isEmpty)
+                    const Center(
+                      child: Text("할 일을 작성해주세요!", style: TextStyle(fontSize: 18)),
+                    )
+                  else
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: todoList.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(40, 0, 20, 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(todoList[index], style: const TextStyle(fontSize: 18),),
+                              IconButton(onPressed: () => del(index), icon: const Icon(Icons.delete), iconSize: 18,)
+                            ]
+                          ),
+                        );
+                      }
+                    )
+                ],
+              ),
+              const SizedBox(height: 20,),
+              ExpansionTile(
+                title: const Text("일주일 간 해야할 일", style: TextStyle(fontSize: 20)),
+                children: [
+                  if (todoList.isEmpty)
+                    const Center(
+                      child: Text("할 일을 작성해주세요!", style: TextStyle(fontSize: 18)),
+                    )
+                  else
+                    ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: todoList.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(40, 0, 20, 5),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(todoList[index], style: const TextStyle(fontSize: 18),),
+                                  IconButton(onPressed: () => del(index), icon: const Icon(Icons.delete), iconSize: 18,)
+                                ]
+                            ),
+                          );
+                        }
+                    )
+                ],
+              ),
+              const SizedBox(height: 20,),
+              ExpansionTile(
+                title: const Text("이번 달의 할 일", style: TextStyle(fontSize: 20)),
+                children: [
+                  if (todoList.isEmpty)
+                    const Center(
+                      child: Text("할 일을 작성해주세요!", style: TextStyle(fontSize: 18)),
+                    )
+                  else
+                    ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: todoList.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(40, 0, 20, 5),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(todoList[index], style: const TextStyle(fontSize: 18),),
+                                  IconButton(onPressed: () => del(index), icon: const Icon(Icons.delete), iconSize: 18,)
+                                ]
+                            ),
+                          );
+                        }
+                    )
+                ],
+              ),
+              const SizedBox(height: 100),
+              ExpansionTile(
+                title: const Text("지금 할 일", style: TextStyle(fontSize: 20)),
+                children: [
+                  if (todoList.isEmpty)
+                    const Center(
+                      child: Text("할 일을 작성해주세요!", style: TextStyle(fontSize: 18)),
+                    )
+                  else
+                    ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: todoList.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(40, 0, 20, 5),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(todoList[index], style: const TextStyle(fontSize: 18),),
+                                  IconButton(onPressed: () => del(index), icon: const Icon(Icons.delete), iconSize: 18,)
+                                ]
+                            ),
+                          );
+                        }
+                    )
+                ],
+              ),
+            ],
+          ),
         ),
       ),
-
-       */
     );
   }
 }

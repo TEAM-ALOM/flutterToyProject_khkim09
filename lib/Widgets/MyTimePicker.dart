@@ -10,9 +10,35 @@ class MyTimePicker extends StatefulWidget {
 }
 
 class _MyTimePickerState extends State<MyTimePicker> {
+  late DateTime startTime = DateTime(2500);
+  late DateTime finishTime = DateTime(1900);
+  late bool check = false; //그냥 startime, finishtime.dart에서 각각 체크 후 bool값을 반환받고 mytimepicker에서는 bool값 최신화
+
+  void startTimeUpdate(DateTime st) {
+    setState(() {
+      startTime = st;
+    });
+  }
+  void finishTimeUpdate(DateTime ft) {
+    setState(() {
+      finishTime = ft;
+    });
+  }
+  void checkTime() {
+    if ((startTime.isBefore(DateTime.now()) || startTime.isAtSameMomentAs(DateTime.now())) &&
+        (finishTime.isAfter(DateTime.now()) || finishTime.isAtSameMomentAs(DateTime.now()))) {
+      setState(() {
+        check = true;
+      });
+    }
+  }
+  bool? getValue() {
+    return check;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
           Text("시 간", style: TextStyle(fontSize: 20),),
@@ -30,8 +56,8 @@ class _MyTimePickerState extends State<MyTimePicker> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  StartTime(),
-                  FinishTime()
+                  StartTime(startTimeChanged: startTimeUpdate,),
+                  FinishTime(finishTimeChanged: finishTimeUpdate,)
                 ],
               ),
             ],

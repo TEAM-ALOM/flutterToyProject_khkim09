@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:toy_project1/HiveModel/HiveModelClass.dart';
 import 'package:toy_project1/Widgets/MemoWidget.dart';
 import 'package:toy_project1/Widgets/ToDoWidget.dart';
 import '../Widgets/MyDatePicker.dart';
@@ -14,17 +12,18 @@ class NewToDoScreen extends StatefulWidget {
 }
 
 class _NewToDoScreenState extends State<NewToDoScreen> {
-  /* 여기서부터 수정*/
-  late String title;
-  late DateTime dateTime;
-  late String memo;
+  late String text = "";
+  late bool timeCheck = false;
+
+  void updateText(String newText) {
+    setState(() {
+      text = newText;
+    });
+  }
 
   save() async { //완료 클릭 시 할 일 저장 (구현 필요) - 할 일 공란 시 경고창 생성 추가
-    var box = await Hive.openBox('todolist'); //todolist : hive Box 이름, openBox : data 저장할 공간 생성
-    await box.add(ToDoModel(title: title, dateTime: dateTime, memo: memo));
+    Navigator.pop(context, text); //todoData를 pop과 동시에 전달
   }
-  /* 여기까지 수정*/
-
 
   @override
   Widget build(BuildContext context) {
@@ -44,53 +43,52 @@ class _NewToDoScreenState extends State<NewToDoScreen> {
         ),
         title: const Text("오늘의 할 일이 무엇인가요?", style: TextStyle(fontSize: 22),),
         actions: [
-          IconButton(onPressed: () { //save 구현 및 mainscreen으로 복귀 구현
-            save();
-            Navigator.pop(context);
-          },
-              icon: const Text("완료", style: TextStyle(fontSize: 18),))
+          IconButton(
+              onPressed: () => save(), //save 구현 및 mainscreen으로 복귀 구현
+              icon: const Text("완료", style: TextStyle(fontSize: 18),)
+          )
         ],
       ),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: const SingleChildScrollView(
+        child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
             child: Column(
               children: [
                 Column(
                   children: [
-                    ToDoText(),
+                    ToDoText(onTextSubmitted: updateText), //onTextSubmitted로 받아온 값(newtodo.text)을 updateText에 이용
                   ],
                 ), //할 일
 
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
 
-                Column(
+                const Column(
                   children: [
                     MyDatePicker(),
                   ],
                 ), //날짜
 
-                SizedBox(height: 60,),
+                const SizedBox(height: 60,),
 
-                Column(
+                const Column(
                   children: [
                     MyTimePicker(),
                   ],
                 ), //시간
 
-                SizedBox(height: 50,),
+                const SizedBox(height: 50,),
 
-                Column(
+                const Column(
                   children: [
                     Memo()
                   ],
                 ), //메모
 
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
               ],
             ),
           ),
