@@ -1,16 +1,14 @@
-# toy_project1
+# todoList toy_project1
 
-A new Flutter project.
+TodoList 생성
 
-## Getting Started
+## syllabus
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. 화면 구현
+2. newtodoscreen 구현
+    2-1) [할 일] 작성
+    2-2) [날짜] pick
+    2-3) [시간] pick
+    2-4) [메모] 작성
+3. '완료' 버튼 클릭 시 mainscreen 저장
+4. Hive로 앱 종료 시에도 저장되도록 구현 (미완)
